@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,7 +50,8 @@ public class PokemonController {
 		logger.info("LIST OF POKEMONS");
 		
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 		
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		String endPoint = url;
@@ -79,7 +81,8 @@ public class PokemonController {
 		logger.info("POKEMON ID " + id);
 
 		HttpHeaders headers = new HttpHeaders();
-		headers.add("user-agent", "Application");
+		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
+        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
 		
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 		Map<String, Object> response = new HashMap<>();
