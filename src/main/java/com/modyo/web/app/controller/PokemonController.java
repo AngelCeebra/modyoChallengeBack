@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,8 @@ import com.modyo.web.app.service.JsonService;
 @RequestMapping("/api")
 public class PokemonController {
 	
+	Logger logger = Logger.getLogger("POKEMONS LOGG");
+	
 	@Value("${pokemon.endpoint}")
 	private String url;
 	
@@ -42,6 +45,8 @@ public class PokemonController {
 	
 	@GetMapping("/pokemons/{offSet}")
 	public List<Pokemon> findAllPokemons(@PathVariable() int offSet) {
+		
+		logger.info("LIST OF POKEMONS");
 		
 		HttpHeaders headers = new HttpHeaders();
 		HttpEntity<String> entity = new HttpEntity<>(headers);
@@ -68,6 +73,8 @@ public class PokemonController {
 	@SuppressWarnings("unused")
 	@GetMapping("pokemons/details/{id}")
 	public ResponseEntity<?> getPokemonDetail(@PathVariable String id) {
+		
+		logger.info("POKEMON ID " + id);
 
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("user-agent", "Application");
