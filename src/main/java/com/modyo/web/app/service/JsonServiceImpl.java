@@ -28,8 +28,8 @@ public class JsonServiceImpl implements JsonService {
 	}
 	
 	@Override
-	public Object parseEffects(String url) {
-		return restTemplate.getForObject(url, EffectEntries.class);
+	public Object parseEffects(String url, HttpEntity<String> entityl) {
+		return restTemplate.exchange(url, HttpMethod.GET, entityl, EffectEntries.class).getBody();
 	}
 
 	@Override

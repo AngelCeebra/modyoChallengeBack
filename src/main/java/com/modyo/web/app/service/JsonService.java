@@ -10,7 +10,7 @@ public interface JsonService {
 	
 	Object parseAll(String url, HttpEntity<String> entity);
 
-	Object parseEffects(String url);
+	Object parseEffects(String url, HttpEntity<String> entity);
 	
 	Object parseEvolution(String url);
 	

@@ -87,7 +87,7 @@ public class PokemonController {
 		Pokemon pokemon = null;
 		try {			
 			pokemon = (Pokemon) jsonService.parse(url + id, entity);
-			EffectEntries effects = (EffectEntries) jsonService.parseEffects(urlAbilities + id);
+			EffectEntries effects = (EffectEntries) jsonService.parseEffects(urlAbilities + id, entity);
 			
 			List<EffectEntries> listEffects = Arrays.asList(effects);
 			
