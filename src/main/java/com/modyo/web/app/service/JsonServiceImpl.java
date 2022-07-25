@@ -19,12 +19,12 @@ public class JsonServiceImpl implements JsonService {
 	
 	@Override
 	public Object parse(String url, HttpEntity<String> entity) {
-		return restTemplate.getForObject(url, Pokemon.class);
+		return restTemplate.exchange(url, HttpMethod.GET, entity, Pokemon.class).getBody();
 	}
 
 	@Override
 	public Object parseAll(String url, HttpEntity<String> entity) {
-		return restTemplate.exchange(url, HttpMethod.GET, null, Pokemons.class).getBody();
+		return restTemplate.exchange(url, HttpMethod.GET, entity, Pokemons.class).getBody();
 	}
 	
 	@Override
