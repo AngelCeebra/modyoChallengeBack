@@ -79,9 +79,9 @@ public class PokemonController {
 		logger.info("POKEMON ID " + id);
 
 		HttpHeaders headers = new HttpHeaders();
+		headers.add("user-agent", "Application");
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-        headers.add("user-agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/54.0.2840.99 Safari/537.36");
+		headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
 		Map<String, Object> response = new HashMap<>();
 		Pokemon pokemon = null;
