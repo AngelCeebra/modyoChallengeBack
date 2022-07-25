@@ -6,9 +6,9 @@ import com.modyo.web.app.entity.Chain;
 
 public interface JsonService {
 
-	Object parse(String url, HttpEntity<String> entity);
+	Object parse(String url);
 	
-	Object parseAll(String url, HttpEntity<String> entity);
+	Object parseAll(String url);
 
 	Object parseEffects(String url);
 	
