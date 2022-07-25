@@ -48,19 +48,23 @@ public class PokemonController {
 		
 		logger.info("LIST OF POKEMONS");
 		
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("user-agent", "Application");
+		
+		HttpEntity<String> entity = new HttpEntity<>(headers);
 		String endPoint = url;
 		
 		if(offSet > 0) {
 			endPoint = endPoint.concat("?offset=" + offSet + "&limit=20");
 		}
 		
-		Pokemons pokemons = (Pokemons) jsonService.parseAll(endPoint);
+		Pokemons pokemons = (Pokemons) jsonService.parseAll(endPoint, entity);
 		
 		Pokemon pokemon = new Pokemon();
 		List<Pokemon> pokemonsList = new ArrayList<Pokemon>();
 		
 		for(Pokemon p:pokemons.getResults()) {
-			pokemon = (Pokemon) jsonService.parse(p.getUrl());
+			pokemon = (Pokemon) jsonService.parse(p.getUrl(), entity);
 			pokemonsList.add(pokemon);	
 		}
 		pokemons.setResults(pokemonsList);
@@ -73,11 +77,15 @@ public class PokemonController {
 	public ResponseEntity<?> getPokemonDetail(@PathVariable String id) {
 		
 		logger.info("POKEMON ID " + id);
+
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("user-agent", "Application");
 		
+		HttpEntity<String> entity = new HttpEntity<>(headers);
 		Map<String, Object> response = new HashMap<>();
 		Pokemon pokemon = null;
 		try {			
-			pokemon = (Pokemon) jsonService.parse(url + id);
+			pokemon = (Pokemon) jsonService.parse(url + id, entity);
 			EffectEntries effects = (EffectEntries) jsonService.parseEffects(urlAbilities + id);
 			
 			List<EffectEntries> listEffects = Arrays.asList(effects);
