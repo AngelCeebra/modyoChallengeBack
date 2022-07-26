@@ -43,7 +43,7 @@ public class PokemonController {
 	JsonService jsonService;
 	
 	@GetMapping("/pokemons/{offSet}")
-	public List<Pokemon> findAllPokemons(@PathVariable() int offSet) {
+	public ResponseEntity<?> findAllPokemons(@PathVariable() int offSet) {
 		
 		logger.info("LIST OF POKEMONS");
 		
@@ -51,25 +51,42 @@ public class PokemonController {
 		headers.add("user-agent", "Application");
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+       
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		
 		String endPoint = url;
+		
+		Map<String, Object> response = new HashMap<>();
+		List<Pokemon> pokemonsList = null;
 		
 		if(offSet > 0) {
 			endPoint = endPoint.concat("?offset=" + offSet + "&limit=20");
 		}
 		
-		Pokemons pokemons = (Pokemons) jsonService.parseAll(endPoint, entity);
-		
-		Pokemon pokemon = new Pokemon();
-		List<Pokemon> pokemonsList = new ArrayList<Pokemon>();
-		
-		for(Pokemon p:pokemons.getResults()) {
-			pokemon = (Pokemon) jsonService.parse(p.getUrl(), entity);
-			pokemonsList.add(pokemon);	
+		try {
+			Pokemons pokemons = (Pokemons) jsonService.parseAll(endPoint, entity);
+			
+			Pokemon pokemon = new Pokemon();
+			pokemonsList = new ArrayList<Pokemon>();
+			
+			for(Pokemon p:pokemons.getResults()) {
+				pokemon = (Pokemon) jsonService.parse(p.getUrl(), entity);
+				pokemonsList.add(pokemon);	
+			}
+			pokemons.setResults(pokemonsList);
+		} catch(Exception e) {
+			response.put("message", "Pokemons don't exist");
+			response.put("error", e.getMessage());
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.NOT_FOUND);
 		}
-		pokemons.setResults(pokemonsList);
 		
-		return pokemonsList;
+		if(pokemonsList.isEmpty() || pokemonsList == null) {
+			response.put("message", "There are no more pokemon");
+			response.put("Alert", HttpStatus.LENGTH_REQUIRED);
+			return new ResponseEntity<Map<String, Object>>(response, HttpStatus.LENGTH_REQUIRED);
+		}
+		
+		return new ResponseEntity<List<Pokemon>>(pokemonsList, HttpStatus.OK);
 	}
 	
 	@SuppressWarnings("unused")
@@ -82,10 +99,12 @@ public class PokemonController {
 		headers.add("user-agent", "Application");
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
 		headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+        
+		HttpEntity<String> entity = new HttpEntity<String>("parameters", headers);
+		
 		Map<String, Object> response = new HashMap<>();
 		Pokemon pokemon = null;
-		try {			
+		try {
 			pokemon = (Pokemon) jsonService.parse(url + id, entity);
 			EffectEntries effects = (EffectEntries) jsonService.parseEffects(urlAbilities + id, entity);
 			
